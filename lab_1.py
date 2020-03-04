@@ -6,12 +6,14 @@ import matplotlib.pyplot as plt
 buf_size =[10,50,1000]
 size_columns=[10,15,20]
 
+
+c_lim=[2.5,3,4]
 # NORMAL
 for i in range(len(buf_size)):
     plt.subplot(1,len(buf_size), i+1)
     x = norm.rvs(scale = 1,size=buf_size[i])
     plt.hist(x, size_columns[i], density=True, histtype='stepfilled', alpha=0.5)
-    y = linspace(-3, 3, 1000)
+    y = linspace(-c_lim[i], c_lim[i], 1000)
     plt.plot(y,norm.pdf(y))
     plt.xlabel("n="+ str(buf_size[i]))
     plt.ylabel("Плотность распределения")
