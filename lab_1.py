@@ -1,106 +1,73 @@
 from pylab import *
 from scipy.stats import *
 from numpy import random
-###     norm 10
-x = norm.rvs(scale = 1,size=10)
-x.sort()
-#hist(x, 10, density=True, histtype='stepfilled', alpha=0.2)
+import matplotlib.pyplot as plt
 
-###     norm 50
-x = norm.rvs(scale = 1,size=50)
-x.sort()
-#hist(x, 15, density=True, histtype='stepfilled', alpha=0.2)
+buf_size =[10,50,1000]
+size_columns=[10,15,20]
 
-###     norm 1000
-x = norm.rvs(scale = 1,size=1000)
-x.sort()
-#hist(x, 20, density=True, histtype='stepfilled', alpha=0.2)
-
-y=linspace(-3,3,1000)
-#plot(y,norm.pdf(y))
-#show()
+# NORMAL
+for i in range(len(buf_size)):
+    plt.subplot(1,len(buf_size), i+1)
+    x = norm.rvs(scale = 1,size=buf_size[i])
+    plt.hist(x, size_columns[i], density=True, histtype='stepfilled', alpha=0.2)
+    y = linspace(-3, 3, 1000)
+    plt.plot(y,norm.pdf(y))
+    plt.xlabel("n="+ str(buf_size[i]))
+    plt.ylabel("Плотность распределения")
+plt.title("Нормальное распределение")
+plt.show()
 
 
+#   LAPLACE
+plt.figure()
+for i in range(len(buf_size)):
+    plt.subplot(1,len(buf_size), i+1)
+    x =  laplace.rvs(scale = sqrt(1/2),size=buf_size[i])
+    plt.hist(x, size_columns[i], density=True, histtype='stepfilled', alpha=0.2)
+    y = linspace(-3, 3, 1000)
+    plt.plot(y,laplace.pdf(y))
+    plt.xlabel("n="+ str(buf_size[i]))
+    plt.ylabel("Плотность распределения")
+plt.title("Распределение Лапласа")
+plt.show()
+
+#   CAUCHY
+plt.figure()
+for i in range(len(buf_size)):
+    plt.subplot(1,len(buf_size), i+1)
+    x = cauchy.rvs(size=buf_size[i])
+    plt.hist(x, size_columns[i], density=True, histtype='stepfilled', alpha=0.2)
+    y = linspace(-3, 3, 1000)
+    plt.plot(y,cauchy.pdf(y))
+    plt.xlabel("n="+ str(buf_size[i]))
+    plt.ylabel("Плотность распределения")
+plt.title("Распределение Коши")
+plt.show()
+
+#   POISSION
+plt.figure()
+for i in range(len(buf_size)):
+    plt.subplot(1,len(buf_size), i+1)
+    x = poisson.rvs(10, size=buf_size[i])
+    plt.hist(x, size_columns[i], density=True, histtype='stepfilled', alpha=0.2)
+    y=linspace(0,20,21)
+    plt.plot(y,poisson.pmf(y, 10))
+    plt.xlabel("n="+ str(buf_size[i]))
+    plt.ylabel("Плотность распределения")
+plt.title("Распределение Пуассона")
+plt.show()
 
 
-###     laplace 10
-x = laplace.rvs(scale = sqrt(1/2),size=10)
-x.sort()
-#hist(x, 10, density=True, histtype='stepfilled', alpha=0.2)
-
-###     laplace 50
-x = laplace.rvs(scale = sqrt(1/2),size=50)
-x.sort()
-#hist(x, 15, density=True, histtype='stepfilled', alpha=0.2)
-
-###     laplace 1000
-x = laplace.rvs(scale = sqrt(1/2),size=1000)
-x.sort()
-#hist(x, 20, density=True, histtype='stepfilled', alpha=0.2)
-
-y=linspace(-3,3,1000)
-#plot(y,laplace.pdf(y))
-#show()
-
-
-###     cauchy 10
-x = cauchy.rvs(size=10)
-x.sort()
-#hist(x, 10, density=True, histtype='stepfilled', alpha=0.2)
-
-###     cauchy 50
-x = cauchy.rvs(size=50)
-x.sort()
-#hist(x, 15, density=True, histtype='stepfilled', alpha=0.2)
-
-###     cauchy 1000
-x = cauchy.rvs(size=1000)
-x.sort()
-#hist(x, 20, density=True, histtype='stepfilled', alpha=0.2)
-
-y=linspace(-3,3,1000)
-#plot(y,cauchy.pdf(y))
-#show()
-
-###     pos 10
-
-x = poisson.rvs(10,size=10)
-x.sort()
-#hist(x, 10, density=True, histtype='stepfilled', alpha=0.2)
-
-###     pos 50
-x =  poisson.rvs(10,size=50)
-x.sort()
-#hist(x, 15, density=True, histtype='stepfilled', alpha=0.2)
-
-###     pos 1000
-x =  poisson.rvs(10,size=1000)
-x.sort()
-#hist(x, 20, density=True, histtype='stepfilled', alpha=0.2)
-
-y=linspace(0,20,21)
-#plot(y,poisson.pmf(y,10))
-#show()
-
-
-###     ravn 10
-
-x = random.uniform(0, 1, 10)
-
-x.sort()
-#hist(x, 10, density=True, histtype='stepfilled', alpha=0.2)
-
-###     ravn 50
-x = random.uniform(0, 1, 50)
-x.sort()
-#hist(x, 15, density=True, histtype='stepfilled', alpha=0.2)
-
-###     ravn 1000
-x = random.uniform(0,1,1000)
-x.sort()
-hist(x, 20, density=True, histtype='stepfilled', alpha=0.2)
-
-y=linspace(0,1,1000)
-plot(x, ones_like(x))
-show()
-
+#   UNIFORM
+plt.figure()
+for i in range(len(buf_size)):
+    plt.subplot(1,len(buf_size), i+1)
+    x = random.uniform(0, 1, buf_size[i])
+    plt.hist(x, size_columns[i], density=True, histtype='stepfilled', alpha=0.2)
+    y = linspace(0, 1, 2)
+    plot(y, ones_like(y))
+    plt.xlabel("n="+ str(buf_size[i]))
+    plt.ylabel("Плотность распределения")
+plt.title("Равномерное распределение")
+plt.show()
