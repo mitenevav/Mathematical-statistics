@@ -37,18 +37,18 @@ plt.show()
 
 
 c_col=[15, 30, 500]
-c_lim=[10,20,50]
+#c_lim=[10,20,50]
 #   CAUCHY
 plt.figure()
 for i in range(len(buf_size)):
     plt.subplot(1,len(buf_size), i+1)
     x = cauchy.rvs(size=buf_size[i])
     plt.hist(x, c_col[i], density=True, histtype='stepfilled', alpha=0.5)
-    y = linspace(-c_lim[i], c_lim[i], 1000)
+    y = linspace(min(x)-3, max(x)+3, 1000)
     plt.plot(y,cauchy.pdf(y))
     plt.xlabel("n="+ str(buf_size[i]))
     plt.ylabel("Плотность распределения")
-    plt.xlim(-c_lim[i], c_lim[i])
+    plt.xlim(min(x)-3, max(x)+3)
 plt.title("Распределение Коши")
 plt.show()
 
