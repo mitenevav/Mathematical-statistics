@@ -57,9 +57,10 @@ def confidence_ellipse(x, y, ax, n_std=3.0, facecolor='none', **kwargs):
     # calculating the stdandard deviation of y ...
     scale_y = np.sqrt(cov[1, 1]) * n_std
     mean_y = np.mean(y)
-
+    #Since the absolute values of the deviations have been normalized away, the slopes of the axes of our ellipse are 1 and -1 (45° and -45°), respectively.
+    axial_tilt = 45
     transf = transforms.Affine2D() \
-        .rotate_deg(45) \
+        .rotate_deg(axial_tilt) \
         .scale(scale_x, scale_y) \
         .translate(mean_x, mean_y)
 
