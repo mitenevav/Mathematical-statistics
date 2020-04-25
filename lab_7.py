@@ -1,7 +1,8 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import norm, chi2
+from scipy.stats import norm, chi2, uniform
+
 print("---------------------------------------NORMAL----------------------------------------------------------")
 # NORMAL
 def MLE(x):
@@ -9,7 +10,7 @@ def MLE(x):
     sigma = np.std(x)
     return mu, sigma
 
-def hi(x, k, step, a0):
+def hiN(x, k, step, a0):
     size = x.size
     n = []
     p = []
@@ -73,7 +74,7 @@ x.sort()
 h = chi2.ppf(1 - alpha, k - 1)
 
 mu, sigma = MLE(x)
-a, n, p, np, nnp, hii = hi(x, k, step, a0)
+a, n, p, np, nnp, hii = hiN(x, k, step, a0)
 
 print('mu = ', mu, 'sigma = ', sigma)
 print(a)
@@ -88,3 +89,34 @@ print(sum(np))
 print(sum(nnp))
 print(sum(hii))
 print('hi = ', h)
+
+
+print("---------------------------------------------------------------------------------------")
+a0 = -1.5
+loc = -2
+sc = 4
+step = 0.85
+k = 5
+h = chi2.ppf(1 - alpha, k - 1)
+
+num = 0
+for i in range(10000):
+    y=uniform.rvs(loc=loc, scale=sc, size=20)
+    a, n, p, np, nnp, hii = hiN(y, k, step, a0)
+    if sum(hii) < h:
+        num += 1
+
+
+print(a)
+print(n)
+print(p)
+print(np)
+print(nnp)
+print(hii)
+print(sum(n))
+print(sum(p))
+print(sum(np))
+print(sum(nnp))
+print(sum(hii))
+print('hi = ', h)
+print(num)
