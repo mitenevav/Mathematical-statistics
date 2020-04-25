@@ -1,78 +1,90 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
-from scipy.stats import norm
-
+from scipy.stats import norm, chi2
 print("---------------------------------------NORMAL----------------------------------------------------------")
 # NORMAL
-def MNK(x,y):
-    beta1 = (np.mean(x*y) - np.mean(x) * np.mean(y)) / (np.mean(x*x) - np.mean(x) ** 2)
-    beta0 = np.mean(y) - np.mean(x) * beta1
-    return beta0, beta1
+def MLE(x):
+    mu = np.mean(x)
+    sigma = np.std(x)
+    return mu, sigma
 
-def rob(x,y):
-    rQ = 0
-    for i in range(len(x)):
-        rQ += np.sign(x[i] - np.median(x)) * np.sign(y[i] - np.median(y))
-    rQ /= len(x)
+def hi(x, k, step, a0):
+    size = x.size
+    n = []
+    p = []
+    a = []
+    np = []
+    nnp = []
+    hi = []
 
-    l = int(len(y) / 4)
-    if len(y) % 4 != 0:
-        l += 1
-    j = len(y) - l + 1
+    ni = x[x <= a0].size
+    pi = norm.cdf(a0)
+    npi = size * pi
+    nnpi = ni - npi
+    hii = nnpi ** 2 /npi
 
-    beta1r = rQ * (y[j] - y[l]) / (x[j] - x[l])
-    beta0r = np.median(y) - beta1r * np.median(x)
+    n.append(ni)
+    p.append(pi)
+    np.append(npi)
+    nnp.append(nnpi)
+    hi.append(hii)
 
-    return beta0r, beta1r
+    for i in range(k-2):
+        a1 = a0 + step
+        ni = x[(x > a0) & (x <= a1)].size
+        pi = norm.cdf(a1) - norm.cdf(a0)
+        npi = size * pi
+        nnpi = ni - npi
+        hii = nnpi ** 2 / npi
 
+        n.append(ni)
+        p.append(pi)
+        np.append(npi)
+        nnp.append(nnpi)
+        hi.append(hii)
+        a.append(a0)
 
-x = np.linspace(-1.8, 2, 20)
-eps = norm.rvs(loc=0, scale=1, size=len(x))
-y0 = 2 + 2 * x
+        a0 += step
 
-y = 2 + 2 * x + eps
+    ni = x[x > a0].size
+    pi = 1 - norm.cdf(a0)
+    npi = size * pi
+    nnpi = ni - npi
+    hii = nnpi ** 2 / npi
 
-beta0, beta1 = MNK(x,y)
-print('beta0 = ', beta0, 'beta1 =', beta1)
-y1 = beta0 + beta1 * x
+    n.append(ni)
+    p.append(pi)
+    np.append(npi)
+    nnp.append(nnpi)
+    hi.append(hii)
+    a.append(a0)
 
-beta0r, beta1r = rob(x,y)
-print('beta0r = ', beta0r, 'beta1r =', beta1r)
-yr = beta0r + beta1r * x
+    return a, n, p, np, nnp, hi
 
+size = 100
+k = 7
+alpha = 0.05
+step = 0.45
+a0 = -1
 
-plt.plot(x, y0, label='модель')
-plt.plot(x, y1, label='МНК')
-plt.plot(x, yr, label='МНМ')
-plt.scatter(x, y, label='выборка')
-plt.xlabel('x')
-plt.ylabel('y')
-plt.legend()
-plt.show()
+x = norm.rvs(loc=0, scale=1, size=size)
+x.sort()
+h = chi2.ppf(1 - alpha, k - 1)
 
+mu, sigma = MLE(x)
+a, n, p, np, nnp, hii = hi(x, k, step, a0)
 
-print("------------------------------------------------------------")
-
-
-
-y[0] += 10
-y[-1] -= 10
-
-beta0, beta1 = MNK(x,y)
-print('beta0 = ', beta0, 'beta1 =', beta1)
-y1 = beta0 + beta1 * x
-
-beta0r, beta1r = rob(x,y)
-print('beta0r = ', beta0r, 'beta1r =', beta1r)
-yr = beta0r + beta1r * x
-
-
-plt.plot(x, y0, label='модель')
-plt.plot(x, y1, label='МНК')
-plt.plot(x, yr, label='МНМ')
-plt.scatter(x, y, label='выборка')
-plt.xlabel('x')
-plt.ylabel('y')
-plt.legend()
-plt.show()
+print('mu = ', mu, 'sigma = ', sigma)
+print(a)
+print(n)
+print(p)
+print(np)
+print(nnp)
+print(hii)
+print(sum(n))
+print(sum(p))
+print(sum(np))
+print(sum(nnp))
+print(sum(hii))
+print('hi = ', h)
