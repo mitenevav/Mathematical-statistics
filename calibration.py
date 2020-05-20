@@ -1,36 +1,10 @@
 
-def binary(a, value):
-    mid = len(a) // 2
-    low = 0
-    high = len(a) - 1
 
-    if value < a[low]:
-        return low
-    elif value > a[high]:
-        return high
-
-    while low != high:
-        if value > a[mid]:
-            low = mid + 1
-        elif value < a[mid]:
-            high = mid
-        elif value == a[mid]:
-            break
-        mid = (low + high) // 2
-
-    return mid
-
-def getTemperature2(table, arr):
-    res = []
-
-    for i in range(len(arr)):
-        index = binary(table[0], arr[i])
-
-        res.append(table[1][index])
-
-    return res
-
-def getTemperature1(table, arr):
+#finding the temperature
+#INPUT: table - calibration table
+#       arr - values
+#OUTPUT:    temperature
+def getTemperature(table, arr):
     num = [i for i in range(len(arr))]
     ptr = sorted(zip(arr, num))
     num = [x for _, x in ptr]
@@ -62,6 +36,10 @@ def getTemperature1(table, arr):
     res = [x for _, x in ptr]
     return res
 
+
+#creating a calibration table
+#INPUT: filename - a file with the calibration
+#OUTPUT:    calibration table
 def getCalibration(filename):
     table = [ [], [] ]
     f = open(filename)
