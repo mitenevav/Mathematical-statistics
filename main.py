@@ -134,7 +134,7 @@ def makeSignals(nums, shtReader, ROI=True, borders=False, left = LEFT, right = R
     return signals
 
 
-#getting results from an html file
+#getting results from sht file
 #INPUT: shtNum - sht file number
 #       nums - sxr numbers
 #       RIO - region of interest
