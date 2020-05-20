@@ -142,13 +142,12 @@ def makeSignals(nums, shtReader, ROI=True, borders=False, left = LEFT, right = R
 #       left - left border
 #       right - right border
 #       graphics - output of graphs
-def mainProcess(shtNum, nums, ROI=True, borders=False, left=LEFT, right=RIGHT, graphics=True):
+def mainProcess(shtNum, nums, ROI=True, borders=False, left=LEFT, right=RIGHT, graphics=False):
     nums.sort(reverse=True)
 
     shtReader = pyglobus.util.ShtReader(SHT_PATH + "sht" + str(shtNum) + ".sht")
 
     signals = makeSignals(nums, shtReader, ROI=ROI, borders=borders, left=left, right=right)
-
     for i in range(len(nums) - 1):
         for j in range(i + 1, len(nums)):
             filename = 'R' + str(nums[i]) + '-' + str(nums[j]) + '.txt'
